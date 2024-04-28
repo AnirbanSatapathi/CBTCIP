@@ -10,7 +10,7 @@ public class GuessTheNumberApplication extends Frame implements ActionListener {
     private int targetNumber;
     private int attemptsLeft;
     private int score;
-    private final int MAX_ATTEMPTS = 5; // Change this value to set the maximum number of attempts
+    private final int MAX_ATTEMPTS = 5; 
 
     public GuessTheNumberApplication() {
         setTitle("Guess The Number");
@@ -85,7 +85,7 @@ public class GuessTheNumberApplication extends Frame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 dialog.dispose();
                 if (attemptsLeft <= 0) {
-                    startNewGame(); // Start a new game if all attempts are used up
+                    startNewGame(); 
                 }
             }
         });
