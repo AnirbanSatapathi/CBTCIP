@@ -1,5 +1,4 @@
-package Task;
-
+//package Task;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -10,14 +9,16 @@ public class GuessTheNumberApplication extends Frame implements ActionListener {
     private int targetNumber;
     private int attemptsLeft;
     private int score;
-    private final int MAX_ATTEMPTS = 5; 
+    private int maxRounds;
+    private final int MAX_ATTEMPTS = 3;
+    private int currentRound;
 
     public GuessTheNumberApplication() {
         setTitle("Guess The Number");
         setSize(800, 500);
         setLayout(new FlowLayout());
 
-        instructionLabel = new Label("Enter your guess:");
+        instructionLabel = new Label("Attempts left: " + MAX_ATTEMPTS + ". Enter your guess:");
         guessTextField = new TextField(10);
         submitButton = new Button("Submit");
 
@@ -49,6 +50,13 @@ public class GuessTheNumberApplication extends Frame implements ActionListener {
     }
 
     private void startNewGame() {
+        maxRounds = 2;
+        currentRound = 1;
+        score = 0;
+        startNewRound();
+    }
+
+    private void startNewRound() {
         attemptsLeft = MAX_ATTEMPTS;
         targetNumber = generateRandomNumber(1, 100);
         updateInstructionLabel();
@@ -61,7 +69,13 @@ public class GuessTheNumberApplication extends Frame implements ActionListener {
     private String checkGuess(int guess) {
         if (guess == targetNumber) {
             score += attemptsLeft * 10;
-            return "Congratulations! You've guessed the number! Your score is: " + score;
+            if (currentRound < maxRounds) {
+                currentRound++;
+                startNewRound();
+                return "Congratulations! You've guessed the number! Your score is: " + score;
+            } else {
+                System.exit(0); // End the game after completing all rounds
+            }
         } else if (guess < targetNumber) {
             attemptsLeft--;
             return "Try a higher number. Attempts left: " + attemptsLeft;
@@ -69,10 +83,11 @@ public class GuessTheNumberApplication extends Frame implements ActionListener {
             attemptsLeft--;
             return "Try a lower number. Attempts left: " + attemptsLeft;
         }
+        return null;
     }
 
     private void updateInstructionLabel() {
-        instructionLabel.setText("Attempts left: " + attemptsLeft + ". Enter your guess:");
+        instructionLabel.setText("Round: " + currentRound + ", Attempts left: " + attemptsLeft + ". Enter your guess:");
     }
 
     private void showMessageDialog(String message) {
@@ -84,9 +99,6 @@ public class GuessTheNumberApplication extends Frame implements ActionListener {
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dialog.dispose();
-                if (attemptsLeft <= 0) {
-                    startNewGame(); 
-                }
             }
         });
         dialog.add(label);
